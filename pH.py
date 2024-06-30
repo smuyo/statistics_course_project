@@ -8,6 +8,10 @@ from stanio.json import process_dictionary
 # Number of samples
 num_samples = 52
 
+num_calibration = 3
+cali_meas = [3.98, 7.01, 9.01]
+cali_real = [4.00, 7.00, 9.00]
+
 # Expected pH
 neutral = 7.0
 
@@ -28,17 +32,15 @@ measurements = [
     6.88, 6.99, 6.92, 6.88
     ]
 
-# Decare the error of the pH meter (from the web)
-meter_error = 0.01
-
-model = CmdStanModel(stan_file="pH.stan")
+model = CmdStanModel(stan_file="pH_v2.stan")
 
 prior_data = process_dictionary({
         "N": num_samples,
         "measurements" : measurements,
         "ave": neutral,
-        "err": meter_error,
-        "num_sims": 100
+        "N_calibration_measurement": num_calibration,
+        "calibration_measurements": cali_meas,
+        "calibration_ph": cali_real
     }
 )
 
@@ -49,17 +51,17 @@ print(mcmc_res.diagnose())
 
 idata = az.from_cmdstanpy(mcmc_res)
 
-print(idata)
-print(idata.sample_stats)
-print(idata.posterior)
-
 idata.to_json("my_arviz_idata.json")
 
-az.plot_posterior(
-    idata.posterior.ph_vals,
-    kind="hist",
-    hdi_prob="hide",
-    ref_val=[6.88,7.01]
-)
+true_vals = idata.posterior.true_ph.values.flatten()
+sim_vals = idata.posterior.yrep.values.flatten()
 
+w = 0.02
+
+plt.hist(sim_vals, label="Simulated measurements", density=True, bins=np.arange(min(sim_vals), max(sim_vals) + w, w), alpha=0.5)
+plt.hist(measurements, label="True measurements", density=True, bins=np.arange(min(measurements), max(measurements) + w, w), alpha=0.5)
+
+plt.legend()
 plt.show()
+
+plt.hist(true_vals, label="True values")
