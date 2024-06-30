@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>untitled</title>
+<title>project</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,16 +57,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="Untitled_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Untitled_files/libs/quarto-html/quarto.js"></script>
-<script src="Untitled_files/libs/quarto-html/popper.min.js"></script>
-<script src="Untitled_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="Untitled_files/libs/quarto-html/anchor.min.js"></script>
-<link href="Untitled_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Untitled_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="Untitled_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="Untitled_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Untitled_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="project_files/libs/clipboard/clipboard.min.js"></script>
+<script src="project_files/libs/quarto-html/quarto.js"></script>
+<script src="project_files/libs/quarto-html/popper.min.js"></script>
+<script src="project_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="project_files/libs/quarto-html/anchor.min.js"></script>
+<link href="project_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="project_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="project_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -99,7 +99,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> arviz <span class="im">as</span> az</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> stanio.json <span class="im">import</span> process_dictionary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now I input some data for the simulations. This data comprises of: - num_samples: The number of pH measurments I have - measurements: The measured pH values - neutral: Neutral pH. We would expect the samples to have a pH similar to this - num_calibration: The number of calibration samples I have - cali_meas: The measured pH of the calibration samples - cali_real: The true pH of the calibration samples</p>
+<p>Now I input some data for the simulations. This data comprises of:</p>
+<ul>
+<li><p>num_samples: The number of pH measurments I have</p></li>
+<li><p>measurements: The measured pH values</p></li>
+<li><p>neutral: Neutral pH. We would expect the samples to have a pH similar to this</p></li>
+<li><p>num_calibration: The number of calibration samples I have</p></li>
+<li><p>cali_meas: The measured pH of the calibration samples</p></li>
+<li><p>cali_real: The true pH of the calibration samples</p></li>
+</ul>
 <div id="cdaab1b8" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>num_samples <span class="op">=</span> <span class="dv">52</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>measurements <span class="op">=</span> [</span>
@@ -141,7 +149,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>My model produces the measurement values with the following model:</p>
 <pre><code>measurement ~ N(pH + bias, curr_err + biological_noise)</code></pre>
-<p>The parameters of the linear model are: - measurement: The measured pH value. - pH: The real pH value. For the samples it is assumed to be 7.0 (see variable “neutral”) - bias. the calibration error. This calibration error is calculated using the calibration measurements, assuming that those measurements come from a normal distribution centered at the true pH of the calibration media, with a standard deviation equal to the calibration noise. - curr_err: The pH meter accuracy. This is calculated from a normal distribution centered at 0.01 and with a standard deviation of 0.1 - biological_noise: This parameter accounts for biological noise. It is calculated from a lognormal distribution centered at 0.05, with a standard deviation of 0.1.</p>
+<p>The parameters of the linear model are:</p>
+<ul>
+<li><p>measurement: The measured pH value.</p></li>
+<li><p>pH: The real pH value. For the samples it is assumed to be 7.0 (see variable “neutral”)</p></li>
+<li><p>bias. the calibration error. This calibration error is calculated using the calibration measurements, assuming that those measurements come from a normal distribution centered at the true pH of the calibration media, with a standard deviation equal to the calibration noise.</p></li>
+<li><p>curr_err: The pH meter accuracy. This is calculated from a normal distribution centered at 0.01 and with a standard deviation of 0.1</p></li>
+<li><p>biological_noise: This parameter accounts for biological noise. It is calculated from a lognormal distribution centered at 0.05, with a standard deviation of 0.1.</p></li>
+</ul>
 <div id="ad35a27f" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.code())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -354,7 +369,7 @@ Processing complete, no problems detected.
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Untitled_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="project_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -367,7 +382,7 @@ Processing complete, no problems detected.
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Untitled_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="project_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
